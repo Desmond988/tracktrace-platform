@@ -19,9 +19,13 @@ app = FastAPI(
 )
 register_error_handlers(app)
 
-_origins = settings.cors_origins_list()
-if settings.FRONTEND_URL and settings.FRONTEND_URL not in _origins:
-    _origins.append(settings.FRONTEND_URL)
+_cors = settings.cors_origins_list
+if callable(_cors):
+    _cors = _cors()
+_origins = list(_cors or [])
+_frontend = getattr(settings, "FRONTEND_URL", None) or getattr(settings, "frontend_url", None)
+if _frontend and _frontend not in _origins:
+    _origins.append(_frontend)
 
 app.add_middleware(
     CORSMiddleware,
