@@ -19,10 +19,9 @@ app = FastAPI(
 )
 register_error_handlers(app)
 
-app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origins_list, allow_credentials=True,
+app.add_middleware(CORSMiddleware, allow_origins=["https://tracktrace-platform-frontend.onrender.com", "http://localhost:5173", "http://localhost:3000", "http://localhost:5174"], allow_credentials=True,
                    allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
                    allow_headers=["Content-Type", "Authorization", "X-CSRF-Token", "Accept-Language"], max_age=600)
-
 
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
@@ -37,16 +36,13 @@ async def security_headers(request: Request, call_next):
         resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
     return resp
 
-
 for r in (auth.router, tracking.router, shipments.router, me.router, people.router, forms.router, content.router, admin.router):
     app.include_router(r)
-
 
 @app.get("/health", tags=["health"])
 def health():
     """Liveness: the process is up."""
     return {"status": "ok"}
-
 
 @app.get("/health/db", tags=["health"])
 def health_db():

@@ -71,7 +71,7 @@ export default function Users() {
               <td>{u.name}</td><td>{u.email}</td><td>{u.role}</td>
               <td>{u.is_active ? "Active" : "Inactive"}</td>
               <td style={{ display: "flex", gap: 10 }}>
-                <button className="btn-secondary" style={{ border: "none", background: "none", color: "var(--freight-700)", cursor: "pointer" }} onClick={() => toggleActive(u)}>{u.is_active ? "Deactivate" : "Activate"}</button>
+                <button className="btn-secondary" style={{ border: "none", background: "none", color: "var(-- Track-700)", cursor: "pointer" }} onClick={() => toggleActive(u)}>{u.is_active ? "Deactivate" : "Activate"}</button>
                 <button className="btn-secondary" style={{ border: "none", background: "none", color: "var(--danger-600)", cursor: "pointer" }} onClick={() => deleteUser(u)}>Delete</button>
               </td>
             </tr>

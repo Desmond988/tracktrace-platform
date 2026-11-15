@@ -143,7 +143,7 @@ export default function ShipmentDetailPage() {
       <ol style={{ listStyle: "none", padding: 0, borderLeft: "2px solid var(--line-200)" }}>
         {[...data.events].reverse().map((e, i) => (
           <li key={i} style={{ paddingLeft: 18, paddingBottom: 18, position: "relative" }}>
-            <span style={{ position: "absolute", left: -6, top: 4, width: 10, height: 10, borderRadius: "50%", background: "var(--freight-700)" }} />
+            <span style={{ position: "absolute", left: -6, top: 4, width: 10, height: 10, borderRadius: "50%", background: "var(-- Track-700)" }} />
             <div style={{ fontWeight: 600 }}>{e.status_ref.label.en}</div>
             {e.location && <div style={{ fontSize: "0.9rem", color: "var(--slate-500)" }}>{e.location}</div>}
             {e.description && <div style={{ fontSize: "0.9rem" }}>{e.description}</div>}

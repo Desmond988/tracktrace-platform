@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
 const SCENES = [
-  { key: "air", label: "Air freight", src: "/images/air.png" },
-  { key: "ocean", label: "Ocean freight", src: "/images/ocean.jpg" },
-  { key: "road", label: "Road freight", src: "/images/road.jpg" },
+  { key: "air", label: "Air  Track", src: "/images/air.png" },
+  { key: "ocean", label: "Ocean  Track", src: "/images/ocean.jpg" },
+  { key: "road", label: "Road  Track", src: "/images/road.jpg" },
 ] as const;
 
 export default function HeroVisual() {

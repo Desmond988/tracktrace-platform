@@ -54,7 +54,7 @@ export default function Contact() {
         </ScrollReveal>
 
         <ScrollReveal delayMs={100}>
-          <div style={{ background: "var(--freight-100)", borderRadius: "var(--radius-md)", padding: 28 }}>
+          <div style={{ background: "var(-- Track-100)", borderRadius: "var(--radius-md)", padding: 28 }}>
             <h2 style={{ fontSize: "1.1rem" }}>{settings["company.name"]}</h2>
             <dl style={{ display: "grid", gap: 14, fontSize: "0.95rem", marginTop: 16 }}>
               <div><dt style={{ color: "var(--slate-500)", fontSize: "0.8rem" }}>Address</dt><dd style={{ margin: 0 }}>{settings["company.address"]}</dd></div>

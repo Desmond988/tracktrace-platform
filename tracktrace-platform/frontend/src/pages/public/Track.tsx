@@ -93,7 +93,7 @@ export default function Track() {
 
   return (
     <div>
-      <section style={{ background: "var(--freight-800)", color: "var(--paper-0)", padding: "48px 0" }}>
+      <section style={{ background: "var(-- Track-800)", color: "var(--paper-0)", padding: "48px 0" }}>
         <div className="container" style={{ maxWidth: 760 }}>
           <h1 style={{ fontSize: "1.9rem", color: "var(--paper-0)" }}>{t("nav.track")}</h1>
           <p style={{ opacity: 0.85, maxWidth: 480 }}>{t("home.heroSubtitle")}</p>
@@ -181,7 +181,7 @@ export default function Track() {
                           aria-current={i === chronological.length - 1 ? "step" : undefined}
                           style={{ paddingLeft: 18, paddingBottom: 20, position: "relative", animation: `rotate-line-in 0.45s ease ${i * 70}ms both` }}
                         >
-                          <span style={{ position: "absolute", left: -6, top: 4, width: 10, height: 10, borderRadius: "50%", background: e.status_ref.is_problem ? "var(--signal-500)" : "var(--freight-700)" }} />
+                          <span style={{ position: "absolute", left: -6, top: 4, width: 10, height: 10, borderRadius: "50%", background: e.status_ref.is_problem ? "var(--signal-500)" : "var(-- Track-700)" }} />
                           <div style={{ fontWeight: 600 }}>{label(e.status_ref)}</div>
                           {e.location && <div style={{ color: "var(--slate-500)", fontSize: "0.9rem" }}>{e.location}</div>}
                           {e.description && <div style={{ fontSize: "0.9rem" }}>{e.description}</div>}

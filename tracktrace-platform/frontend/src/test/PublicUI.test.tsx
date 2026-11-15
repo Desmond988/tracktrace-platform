@@ -9,7 +9,7 @@ import ScrollReveal from "../components/ScrollReveal";
 import "../i18n";
 
 const SERVICES = [
-  { id: "1", code: "AIR_FREIGHT", name: { en: "Air Freight" } },
+  { id: "1", code: "AIR_ Track", name: { en: "Air  Track" } },
   { id: "2", code: "CUSTOMS_CLEARANCE", name: { en: "Customs Clearance" } },
 ];
 const LEGAL = [{ slug: "privacy-policy", title: { en: "Privacy Policy" } }];
@@ -105,8 +105,8 @@ describe("public pages render real, non-invented content", () => {
 
   it("Services lists exactly what /api/services returns, each linking to a detail page", async () => {
     renderAt("/services");
-    const link = await screen.findByRole("link", { name: /air freight/i });
-    expect(link).toHaveAttribute("href", "/services/air-freight");
+    const link = await screen.findByRole("link", { name: /air  Track/i });
+    expect(link).toHaveAttribute("href", "/services/air- Track");
     expect(screen.getByRole("link", { name: /customs clearance/i })).toHaveAttribute("href", "/services/customs-clearance");
   });
 
@@ -142,7 +142,7 @@ describe("public pages render real, non-invented content", () => {
 });
 
 describe("no dead public links", () => {
-  const PUBLIC_PATHS = ["/", "/track", "/services", "/services/air-freight", "/about", "/quote", "/contact", "/faq", "/locations", "/careers", "/login", "/register", "/forgot-password", "/legal/privacy-policy"];
+  const PUBLIC_PATHS = ["/", "/track", "/services", "/services/air- Track", "/about", "/quote", "/contact", "/faq", "/locations", "/careers", "/login", "/register", "/forgot-password", "/legal/privacy-policy"];
 
   it.each(PUBLIC_PATHS)("every internal link rendered on %s points at a real page (never the 404 page)", async (path) => {
     const { container, unmount } = renderAt(path);

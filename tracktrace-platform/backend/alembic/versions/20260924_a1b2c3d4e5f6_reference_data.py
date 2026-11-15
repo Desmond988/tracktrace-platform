@@ -98,18 +98,18 @@ STATUSES = [
 ]
 
 SERVICES = [
-    ("AIR_FREIGHT", {
-        "en": "Air Freight", "fr": "Fret aérien", "es": "Transporte aéreo", "de": "Luftfracht", "pt": "Frete aéreo",
+    ("AIR_ Track", {
+        "en": "Air  Track", "fr": "Fret aérien", "es": "Transporte aéreo", "de": "Luftfracht", "pt": "Frete aéreo",
         "it": "Trasporto aereo", "nl": "Luchtvracht", "pl": "Transport lotniczy", "ru": "Авиаперевозки",
         "tr": "Hava kargo", "ar": "الشحن الجوي", "zh": "空运", "ja": "航空貨物", "ko": "항공 화물", "hi": "हवाई माल ढुलाई",
         "sw": "Usafirishaji wa Anga"}),
-    ("OCEAN_FREIGHT", {
-        "en": "Ocean Freight", "fr": "Fret maritime", "es": "Transporte marítimo", "de": "Seefracht",
+    ("OCEAN_ Track", {
+        "en": "Ocean  Track", "fr": "Fret maritime", "es": "Transporte marítimo", "de": "Seefracht",
         "pt": "Frete marítimo", "it": "Trasporto marittimo", "nl": "Zeevracht", "pl": "Transport morski",
         "ru": "Морские перевозки", "tr": "Deniz kargo", "ar": "الشحن البحري", "zh": "海运", "ja": "海上輸送",
         "ko": "해상 화물", "hi": "समुद्री माल ढुलाई", "sw": "Usafirishaji wa Baharini"}),
-    ("ROAD_FREIGHT", {
-        "en": "Road Freight", "fr": "Fret routier", "es": "Transporte por carretera", "de": "Straßenfracht",
+    ("ROAD_ Track", {
+        "en": "Road  Track", "fr": "Fret routier", "es": "Transporte por carretera", "de": "Straßenfracht",
         "pt": "Frete rodoviário", "it": "Trasporto su strada", "nl": "Wegvervoer", "pl": "Transport drogowy",
         "ru": "Автомобильные перевозки", "tr": "Kara nakliyesi", "ar": "الشحن البري", "zh": "陆运", "ja": "陸上輸送",
         "ko": "육상 화물", "hi": "सड़क माल ढुलाई", "sw": "Usafirishaji wa Barabara"}),
@@ -117,8 +117,8 @@ SERVICES = [
         "en": "Warehousing", "fr": "Entreposage", "es": "Almacenamiento", "de": "Lagerung", "pt": "Armazenagem",
         "it": "Magazzinaggio", "nl": "Opslag", "pl": "Magazynowanie", "ru": "Складирование", "tr": "Depolama",
         "ar": "التخزين", "zh": "仓储", "ja": "倉庫保管", "ko": "창고 보관", "hi": "भंडारण", "sw": "Uhifadhi wa Ghala"}),
-    ("FREIGHT_FORWARDING", {
-        "en": "Freight Forwarding", "fr": "Transit et affrètement", "es": "Transporte de carga",
+    (" Track_FORWARDING", {
+        "en": " Track Forwarding", "fr": "Transit et affrètement", "es": "Transporte de carga",
         "de": "Spedition", "pt": "Despacho de carga", "it": "Spedizioni internazionali", "nl": "Expeditie",
         "pl": "Spedycja", "ru": "Экспедирование грузов", "tr": "Nakliye acenteliği", "ar": "الشحن والتوصيل",
         "zh": "货运代理", "ja": "貨物輸送代行", "ko": "화물 운송 대행", "hi": "माल अग्रेषण", "sw": "Uwakilishi wa Shehena"}),
@@ -172,5 +172,5 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.execute("DELETE FROM faqs")
-    op.execute("DELETE FROM service_types WHERE code IN ('AIR_FREIGHT','OCEAN_FREIGHT','ROAD_FREIGHT','WAREHOUSING','FREIGHT_FORWARDING','CUSTOMS_CLEARANCE')")
+    op.execute("DELETE FROM service_types WHERE code IN ('AIR_ Track','OCEAN_ Track','ROAD_ Track','WAREHOUSING',' Track_FORWARDING','CUSTOMS_CLEARANCE')")
     op.execute("DELETE FROM shipment_statuses WHERE code IN (%s)" % ",".join(f"'{s[0]}'" for s in STATUSES))

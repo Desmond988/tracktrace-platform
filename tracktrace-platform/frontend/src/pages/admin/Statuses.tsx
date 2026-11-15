@@ -57,7 +57,7 @@ export default function Statuses() {
                 <td className="mono" style={{ fontSize: "0.8rem" }}>{Object.keys(s.label).join(", ")}</td>
                 <td>{s.is_terminal ? "Yes" : "No"}</td><td>{s.is_problem ? "Yes" : "No"}</td>
                 <td>{s.is_active ? "Active" : "Inactive"}</td>
-                <td><button className="btn-secondary" style={{ border: "none", background: "none", color: "var(--freight-700)", cursor: "pointer" }} onClick={() => toggleActive(s)}>{s.is_active ? "Deactivate" : "Activate"}</button></td>
+                <td><button className="btn-secondary" style={{ border: "none", background: "none", color: "var(-- Track-700)", cursor: "pointer" }} onClick={() => toggleActive(s)}>{s.is_active ? "Deactivate" : "Activate"}</button></td>
               </tr>
             ))}
           </tbody>

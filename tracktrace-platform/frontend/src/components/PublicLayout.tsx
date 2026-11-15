@@ -35,7 +35,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   }
 
   const linkStyle = ({ isActive }: { isActive: boolean }) =>
-    ({ textDecoration: "none", color: isActive ? "var(--freight-700)" : "var(--ink-900)" }) as const;
+    ({ textDecoration: "none", color: isActive ? "var(-- Track-700)" : "var(--ink-900)" }) as const;
 
   return (
     <>
@@ -49,7 +49,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
           <NavLink to={isStaff ? "/staff" : "/account"} className="hover-underline" style={linkStyle} onClick={onNavigate}>
             {isStaff ? t("nav.admin") : t("nav.dashboard")}
           </NavLink>
-          <button className="btn-secondary" style={{ border: "none", background: "none", padding: 0, cursor: "pointer", color: "var(--freight-700)", fontWeight: 600, textAlign: "left" }} onClick={onSignOut}>
+          <button className="btn-secondary" style={{ border: "none", background: "none", padding: 0, cursor: "pointer", color: "var(-- Track-700)", fontWeight: 600, textAlign: "left" }} onClick={onSignOut}>
             {t("nav.signout")}
           </button>
         </>

@@ -47,7 +47,7 @@ export default function Locations() {
             {displayItems.map((loc, i) => (
               <ScrollReveal key={loc.id} delayMs={i * 60} className="hover-lift" style={{ padding: 20, border: "1px solid var(--line-200)", borderRadius: "var(--radius-md)", background: "var(--paper-0)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ color: "var(--freight-700)" }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style={{ color: "var(-- Track-700)" }}>
                     <path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z" stroke="currentColor" strokeWidth="1.6" />
                     <circle cx="12" cy="9" r="2.4" stroke="currentColor" strokeWidth="1.6" />
                   </svg>

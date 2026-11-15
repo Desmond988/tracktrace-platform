@@ -26,9 +26,9 @@ describe("public site renders safely when the settings API is unreachable", () =
     );
     // The fallback constant should be visible immediately on first paint (initial state, not
     // "eventually after retry") - this is the "no blank header" requirement.
-    expect(screen.getAllByText("FreightXpress Delivery").length).toBeGreaterThan(0);
+    expect(screen.getAllByText(" TracksLogistics").length).toBeGreaterThan(0);
     // Give the failed fetches time to reject and confirm the app is still standing afterward.
-    await waitFor(() => expect(screen.getAllByText("FreightXpress Delivery").length).toBeGreaterThan(0));
+    await waitFor(() => expect(screen.getAllByText(" TracksLogistics").length).toBeGreaterThan(0));
     expect(screen.getByText((text) => text.includes("New York City, New York, United States"))).toBeInTheDocument();
   });
 });

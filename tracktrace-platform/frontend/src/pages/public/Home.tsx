@@ -84,7 +84,7 @@ function ServicesShowcase() {
           >
             <ServiceIcon code={s.code} />
             <div style={{ fontWeight: 600, marginTop: 12 }}>{localized(s.name, i18n.language)}</div>
-            <span className="icon-hover hover-underline" style={{ fontSize: "0.85rem", color: "var(--freight-700)", marginTop: 6 }}>{t("common.learnMore")} →</span>
+            <span className="icon-hover hover-underline" style={{ fontSize: "0.85rem", color: "var(-- Track-700)", marginTop: 6 }}>{t("common.learnMore")} →</span>
           </Link>
         </ScrollReveal>
       ))}
@@ -93,11 +93,11 @@ function ServicesShowcase() {
 }
 
 export function ServiceIcon({ code }: { code: string }) {
-  const common = { width: 34, height: 34, viewBox: "0 0 24 24", fill: "none", stroke: "var(--freight-700)", strokeWidth: 1.6 } as const;
-  if (code === "AIR_FREIGHT") return <svg {...common}><path d="M2 16l7-2 4-8 2 1-3 7 6-1 3-3 1 1-3 4-7 1-6 3z" /></svg>;
-  if (code === "OCEAN_FREIGHT") return <svg {...common}><path d="M3 17c2 1 4 1 6 0s4-1 6 0 4 1 6 0M5 13h14l-2-6H7z" /></svg>;
-  if (code === "ROAD_FREIGHT") return <svg {...common}><rect x="2" y="8" width="13" height="8" rx="1" /><path d="M15 11h4l3 3v2h-7z" /><circle cx="6" cy="18" r="1.6" /><circle cx="18" cy="18" r="1.6" /></svg>;
+  const common = { width: 34, height: 34, viewBox: "0 0 24 24", fill: "none", stroke: "var(-- Track-700)", strokeWidth: 1.6 } as const;
+  if (code === "AIR_ Track") return <svg {...common}><path d="M2 16l7-2 4-8 2 1-3 7 6-1 3-3 1 1-3 4-7 1-6 3z" /></svg>;
+  if (code === "OCEAN_ Track") return <svg {...common}><path d="M3 17c2 1 4 1 6 0s4-1 6 0 4 1 6 0M5 13h14l-2-6H7z" /></svg>;
+  if (code === "ROAD_ Track") return <svg {...common}><rect x="2" y="8" width="13" height="8" rx="1" /><path d="M15 11h4l3 3v2h-7z" /><circle cx="6" cy="18" r="1.6" /><circle cx="18" cy="18" r="1.6" /></svg>;
   if (code === "WAREHOUSING") return <svg {...common}><path d="M3 10l9-6 9 6v10H3z" /><path d="M9 20v-6h6v6" /></svg>;
-  if (code === "FREIGHT_FORWARDING") return <svg {...common}><path d="M4 6h9v9H4zM13 10h4l3 3v2h-7z" /><circle cx="7.5" cy="18" r="1.6" /><circle cx="17" cy="18" r="1.6" /></svg>;
+  if (code === " Track_FORWARDING") return <svg {...common}><path d="M4 6h9v9H4zM13 10h4l3 3v2h-7z" /><circle cx="7.5" cy="18" r="1.6" /><circle cx="17" cy="18" r="1.6" /></svg>;
   return <svg {...common}><path d="M4 4h16v6H4zM4 14h10v6H4z" /></svg>;
 }

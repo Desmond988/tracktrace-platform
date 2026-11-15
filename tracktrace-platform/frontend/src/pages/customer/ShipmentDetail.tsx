@@ -52,7 +52,7 @@ export default function CustomerShipmentDetail() {
           <ol style={{ listStyle: "none", padding: 0, borderLeft: "2px solid var(--line-200)" }}>
             {[...data.events].reverse().map((e, i) => (
               <li key={i} style={{ paddingLeft: 18, paddingBottom: 18, position: "relative" }}>
-                <span style={{ position: "absolute", left: -6, top: 4, width: 10, height: 10, borderRadius: "50%", background: e.status_ref.is_problem ? "var(--signal-500)" : "var(--freight-700)" }} />
+                <span style={{ position: "absolute", left: -6, top: 4, width: 10, height: 10, borderRadius: "50%", background: e.status_ref.is_problem ? "var(--signal-500)" : "var(-- Track-700)" }} />
                 <div style={{ fontWeight: 600 }}>{label(e.status_ref)}</div>
                 {e.location && <div style={{ fontSize: "0.9rem", color: "var(--slate-500)" }}>{e.location}</div>}
                 {e.description && <div style={{ fontSize: "0.9rem" }}>{e.description}</div>}

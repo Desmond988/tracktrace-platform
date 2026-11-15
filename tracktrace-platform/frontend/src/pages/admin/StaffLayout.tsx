@@ -35,7 +35,7 @@ export default function StaffLayout() {
         <div style={{ padding: "20px", marginTop: 20, borderTop: "1px solid var(--line-200)", fontSize: "0.85rem", color: "var(--slate-500)" }}>
           {user?.name} · {user?.role}
           <div style={{ marginTop: 8, display: "flex", gap: 10 }}>
-            <button className="btn-secondary" style={{ border: "none", background: "none", padding: 0, cursor: "pointer", color: "var(--freight-700)" }}
+            <button className="btn-secondary" style={{ border: "none", background: "none", padding: 0, cursor: "pointer", color: "var(-- Track-700)" }}
                     onClick={async () => { await logout(); navigate("/login"); }}>Sign out</button>
           </div>
         </div>

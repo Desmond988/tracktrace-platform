@@ -26,11 +26,11 @@ export default function CustomerNotifications() {
       <h1 style={{ fontSize: "1.6rem" }}>{t("customer.notifications")}</h1>
       {items && items.length === 0 && <p style={{ color: "var(--slate-500)" }}>{t("customer.noNotifications")}</p>}
       {items?.map((n) => (
-        <div key={n.id} style={{ border: "1px solid var(--line-200)", borderRadius: "var(--radius-md)", padding: 14, marginBottom: 10, background: n.is_read ? "var(--paper-0)" : "var(--freight-100)" }}>
+        <div key={n.id} style={{ border: "1px solid var(--line-200)", borderRadius: "var(--radius-md)", padding: 14, marginBottom: 10, background: n.is_read ? "var(--paper-0)" : "var(-- Track-100)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
             <strong>{n.subject || t("customer.notifications")}</strong>
             {!n.is_read && (
-              <button className="btn-secondary" style={{ border: "none", background: "none", padding: 0, cursor: "pointer", color: "var(--freight-700)", fontSize: "0.85rem" }} onClick={() => markRead(n.id)}>
+              <button className="btn-secondary" style={{ border: "none", background: "none", padding: 0, cursor: "pointer", color: "var(-- Track-700)", fontSize: "0.85rem" }} onClick={() => markRead(n.id)}>
                 {t("customer.markRead")}
               </button>
             )}

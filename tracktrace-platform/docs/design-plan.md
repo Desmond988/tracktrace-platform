@@ -1,14 +1,14 @@
 # Design plan — Track & Trace platform
 
 ## Subject
-A freight/logistics company's public site + customer portal + staff console. Audience: shippers checking
+A  Track/logistics company's public site + customer portal + staff console. Audience: shippers checking
 on cargo (anxious, wants certainty fast), prospects sizing up a logistics partner (wants competence and
 scale), and internal staff (wants density and speed, not marketing polish).
 
 ## Color
 - `--ink-900:  #14212B` - near-black navy, body text, headers
 - `--paper-50: #F6F4EF` - warm off-white background (not the AI-cliché cream #F4F1EA - cooler, greyer)
-- `--freight-700: #1F5C52` - deep teal-green, primary brand/action color (evokes shipping containers/ports, not SaaS blue)
+- `-- Track-700: #1F5C52` - deep teal-green, primary brand/action color (evokes shipping containers/ports, not SaaS blue)
 - `--signal-500: #C65D2E` - burnt orange, used ONLY for status attention (delayed/exception), never decoration
 - `--line-200: #D8D3C6` - hairline rule/border color
 - `--slate-500: #5B6B70` - secondary text, captions
@@ -34,7 +34,7 @@ scale), and internal staff (wants density and speed, not marketing polish).
 - Tracking result: timeline is a vertical rule with status nodes, most recent at top, dates in mono type.
 - Admin console: dense data-table-first layout, sidebar nav, no marketing chrome. Left-aligned tables,
   sortable headers, filters as a thin toolbar above the table - utilitarian, not branded.
-- Alignment: left-aligned throughout (freight documents/manifests are left-aligned, scannable - not centered marketing).
+- Alignment: left-aligned throughout ( Track documents/manifests are left-aligned, scannable - not centered marketing).
 
 ## Principles
 1. The tracking input is the hero everywhere it can be - homepage, header, and its own page.

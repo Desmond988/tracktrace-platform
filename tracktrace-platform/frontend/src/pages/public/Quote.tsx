@@ -48,8 +48,8 @@ export default function Quote() {
   if (done) {
     return (
       <div className="container" style={{ padding: "72px 0", maxWidth: 480, textAlign: "center", animation: "crossfade-in 0.4s ease" }}>
-        <div style={{ width: 52, height: 52, borderRadius: "50%", background: "var(--freight-100)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
-          <svg width="26" height="26" viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="var(--freight-700)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        <div style={{ width: 52, height: 52, borderRadius: "50%", background: "var(-- Track-100)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+          <svg width="26" height="26" viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-9" stroke="var(-- Track-700)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </div>
         <div className="banner banner-success">{t("form.thankYouQuote")} <strong className="mono">{done}</strong>.</div>
       </div>
@@ -69,7 +69,7 @@ export default function Quote() {
         {error && <div className="banner banner-error">{error}</div>}
         <form onSubmit={onSubmit}>
           <ScrollReveal as="section" style={{ marginBottom: 28 }}>
-            <h2 style={{ fontSize: "1.05rem", color: "var(--freight-700)" }}>1. Contact details</h2>
+            <h2 style={{ fontSize: "1.05rem", color: "var(-- Track-700)" }}>1. Contact details</h2>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div className="field"><label>{t("form.name")}</label><input required value={form.name} onChange={(e) => set("name", e.target.value)} /></div>
               <div className="field"><label>Company</label><input value={form.company} onChange={(e) => set("company", e.target.value)} /></div>
@@ -79,7 +79,7 @@ export default function Quote() {
           </ScrollReveal>
 
           <ScrollReveal as="section" delayMs={60} style={{ marginBottom: 28 }}>
-            <h2 style={{ fontSize: "1.05rem", color: "var(--freight-700)" }}>2. Shipment route</h2>
+            <h2 style={{ fontSize: "1.05rem", color: "var(-- Track-700)" }}>2. Shipment route</h2>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div className="field"><label>{t("form.origin")}</label><input required value={form.origin} onChange={(e) => set("origin", e.target.value)} /></div>
               <div className="field"><label>{t("form.destination")}</label><input required value={form.destination} onChange={(e) => set("destination", e.target.value)} /></div>
@@ -94,7 +94,7 @@ export default function Quote() {
           </ScrollReveal>
 
           <ScrollReveal as="section" delayMs={120} style={{ marginBottom: 28 }}>
-            <h2 style={{ fontSize: "1.05rem", color: "var(--freight-700)" }}>3. Cargo details</h2>
+            <h2 style={{ fontSize: "1.05rem", color: "var(-- Track-700)" }}>3. Cargo details</h2>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
               <div className="field" style={{ gridColumn: "1 / -1" }}><label>Cargo type</label><input value={form.cargo_type} onChange={(e) => set("cargo_type", e.target.value)} /></div>
               <div className="field"><label>Weight (kg)</label><input type="number" min="0" value={form.weight_kg} onChange={(e) => set("weight_kg", e.target.value)} /></div>
@@ -104,7 +104,7 @@ export default function Quote() {
           </ScrollReveal>
 
           <ScrollReveal as="section" delayMs={180} style={{ marginBottom: 24 }}>
-            <h2 style={{ fontSize: "1.05rem", color: "var(--freight-700)" }}>4. Anything else?</h2>
+            <h2 style={{ fontSize: "1.05rem", color: "var(-- Track-700)" }}>4. Anything else?</h2>
             <div className="field" style={{ marginBottom: 0 }}><textarea rows={4} placeholder={t("form.additionalInfo")} value={form.additional_info} onChange={(e) => set("additional_info", e.target.value)} /></div>
           </ScrollReveal>
 

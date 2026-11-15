@@ -6,11 +6,11 @@ from app.core.config import settings as env
 from app.models import SiteSetting
 
 PLACEHOLDER = {
-    "company.name": "FreightXpress Delivery",
-    "company.legal_name": "FreightXpress Delivery",
+    "company.name": " TracksLogistics",
+    "company.legal_name": " TracksLogistics",
     "company.address": "New York City, New York, United States",
-    "company.phone": "[COMPANY PHONE]",
-    "company.email": "[COMPANY EMAIL]",
+    "company.phone": " +1 (936) 276‑8193‬",
+    "company.email": " trackslogistic0@gmail.com",
     "company.registration": "[COMPANY REGISTRATION]",
     "company.certifications": "[COMPANY CERTIFICATIONS]",
     "company.business_hours": " Available 24/7",
@@ -18,8 +18,8 @@ PLACEHOLDER = {
     "company.favicon_url": "",
     "social.facebook": "", "social.linkedin": "", "social.x": "", "social.instagram": "", "social.youtube": "", "social.whatsapp": "",
     "footer.text": "",
-    "seo.title": "FreightXpress Delivery | Freight and logistics",
-    "seo.description": "Track your shipment and request freight and logistics services.",
+    "seo.title": " TracksLogistics |  Track and logistics",
+    "seo.description": "Track your shipment and request  Track and logistics services.",
     "locale.languages": ["en", "fr", "es", "de", "pt", "it", "nl", "pl", "ru", "tr", "ar", "zh", "ja", "ko", "hi", "sw"],
     "locale.default_language": "en",
     "locale.default_currency": "USD",

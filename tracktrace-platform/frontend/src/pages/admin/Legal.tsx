@@ -51,7 +51,7 @@ export default function LegalAdmin() {
         <ul style={{ listStyle: "none", padding: 0 }}>
           {list.map((l) => (
             <li key={l.slug}>
-              <button className="btn-secondary" style={{ border: "none", background: "none", padding: "6px 0", cursor: "pointer", color: slug === l.slug ? "var(--freight-700)" : "var(--ink-900)", fontWeight: slug === l.slug ? 700 : 400 }} onClick={() => open(l.slug)}>
+              <button className="btn-secondary" style={{ border: "none", background: "none", padding: "6px 0", cursor: "pointer", color: slug === l.slug ? "var(-- Track-700)" : "var(--ink-900)", fontWeight: slug === l.slug ? 700 : 400 }} onClick={() => open(l.slug)}>
                 {l.title.en}
               </button>
             </li>

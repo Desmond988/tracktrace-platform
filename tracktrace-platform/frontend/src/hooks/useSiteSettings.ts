@@ -9,14 +9,14 @@ export interface PublicSiteSettings {
   [key: string]: unknown;
 }
 
-// FreightXpress Delivery is used as the safe default while the settings request is in flight or if
+//  TracksLogistics is used as the safe default while the settings request is in flight or if
 // it fails - the company name is known and confirmed; other facts stay as placeholders until a staff
 // member fills them in via the admin Settings page (GET/PUT /api/admin/settings).
 const DEFAULTS: PublicSiteSettings = {
-  "company.name": "FreightXpress Delivery",
+  "company.name": " TracksLogistics",
   "company.address": "New York City, New York, United States",
-  "company.phone": "[COMPANY PHONE]",
-  "company.email": "[COMPANY EMAIL]",
+  "company.phone": " +1 (936) 276‑8193‬",
+  "company.email": " trackslogistic0@gmail.com",
 };
 
 let cached: Promise<PublicSiteSettings> | null = null;

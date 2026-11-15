@@ -21,7 +21,7 @@ export default function Careers() {
 
       <div className="container" style={{ padding: "40px 0 64px" }}>
         <ScrollReveal style={{ textAlign: "center", padding: "60px 20px", border: "1px dashed var(--line-200)", borderRadius: "var(--radius-md)", color: "var(--slate-500)" }}>
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" style={{ margin: "0 auto 14px", color: "var(--freight-700)" }}>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" style={{ margin: "0 auto 14px", color: "var(-- Track-700)" }}>
             <rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="1.6" />
             <path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" strokeWidth="1.6" />
           </svg>

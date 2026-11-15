@@ -21,7 +21,7 @@ export default function DeliveryProgress({ currentSortOrder, minSortOrder, maxSo
         aria-label={label}
         style={{ height: 6, borderRadius: 999, background: "var(--line-200)", overflow: "hidden" }}
       >
-        <div style={{ height: "100%", width: `${pct}%`, background: "var(--freight-700)", borderRadius: 999, transition: "width 0.6s ease" }} />
+        <div style={{ height: "100%", width: `${pct}%`, background: "var(-- Track-700)", borderRadius: 999, transition: "width 0.6s ease" }} />
       </div>
     </div>
   );

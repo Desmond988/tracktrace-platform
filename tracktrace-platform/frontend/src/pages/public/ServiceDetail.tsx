@@ -25,7 +25,7 @@ export default function ServiceDetail() {
     <div>
       <section style={{ padding: "48px 0", borderBottom: "1px solid var(--line-200)" }}>
         <div className="container" style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <div style={{ background: "var(--freight-100)", borderRadius: "var(--radius-md)", padding: 18 }}>
+          <div style={{ background: "var(-- Track-100)", borderRadius: "var(--radius-md)", padding: 18 }}>
             <div style={{ transform: "scale(1.6)" }}><ServiceIcon code={service.code} /></div>
           </div>
           <div>

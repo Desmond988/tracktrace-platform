@@ -24,7 +24,7 @@ export default function Services() {
         <div className="container">
           <h1 style={{ fontSize: "2rem" }}>{t("home.servicesTitle")}</h1>
           <p style={{ color: "var(--slate-500)", maxWidth: 560 }}>
-            The freight and logistics services available through our platform. Select one to learn more.
+            The  Track and logistics services available through our platform. Select one to learn more.
           </p>
         </div>
       </section>
@@ -41,7 +41,7 @@ export default function Services() {
                 <ServiceIcon code={s.code} />
                 <h2 style={{ fontSize: "1.1rem", marginTop: 14 }}>{localized(s.name, i18n.language)}</h2>
                 <p style={{ color: "var(--slate-500)", fontSize: "0.9rem" }}>{genericBlurb(s.code)}</p>
-                <span className="icon-hover hover-underline" style={{ fontSize: "0.85rem", color: "var(--freight-700)" }}>{t("common.learnMore")} →</span>
+                <span className="icon-hover hover-underline" style={{ fontSize: "0.85rem", color: "var(-- Track-700)" }}>{t("common.learnMore")} →</span>
               </Link>
             </ScrollReveal>
           ))}
@@ -53,15 +53,15 @@ export default function Services() {
   );
 }
 
-/** Generic, factual, industry-level descriptions of what each freight mode is - never a claim about
- * FreightXpress's own fleet, capacity, coverage, or performance, since none of that has been confirmed. */
+/** Generic, factual, industry-level descriptions of what each  Track mode is - never a claim about
+ *  TrackXpress's own fleet, capacity, coverage, or performance, since none of that has been confirmed. */
 export function genericBlurb(code: string): string {
   switch (code) {
-    case "AIR_FREIGHT": return "Fast transport for time-sensitive or high-value cargo, moved by air.";
-    case "OCEAN_FREIGHT": return "Cost-effective transport for larger cargo volumes, moved by sea.";
-    case "ROAD_FREIGHT": return "Door-to-door transport by road, suited to regional and cross-border moves.";
+    case "AIR_ Track": return "Fast transport for time-sensitive or high-value cargo, moved by air.";
+    case "OCEAN_ Track": return "Cost-effective transport for larger cargo volumes, moved by sea.";
+    case "ROAD_ Track": return "Door-to-door transport by road, suited to regional and cross-border moves.";
     case "WAREHOUSING": return "Storage and handling for cargo between legs of its journey.";
-    case "FREIGHT_FORWARDING": return "Coordination of multi-leg shipments across carriers and borders.";
+    case " Track_FORWARDING": return "Coordination of multi-leg shipments across carriers and borders.";
     case "CUSTOMS_CLEARANCE": return "Handling the customs paperwork and clearance a shipment requires.";
     default: return "";
   }

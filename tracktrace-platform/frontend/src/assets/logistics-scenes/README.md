@@ -1,6 +1,6 @@
 # Real photography goes here
 
-This folder is intentionally empty. When FreightXpress Delivery provides real photography (fleet,
+This folder is intentionally empty. When  TracksLogistics provides real photography (fleet,
 warehouses, staff, cargo), drop the files here and reference them from `HeroVisual.tsx` and
 `AboutVisual.tsx` (search for `PLACEHOLDER_SCENES` in each file - each entry is one slide/section).
 

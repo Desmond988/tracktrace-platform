@@ -20,7 +20,7 @@ function AlternatingSection({ reverse, icon, title, children, image }: { reverse
   return (
     <ScrollReveal as="section" style={{ padding: "44px 0", borderBottom: "1px solid var(--line-200)" }}>
       <div className="container" style={{ display: "grid", gridTemplateColumns: "0.7fr 1.3fr", gap: 40, alignItems: "center", direction: reverse ? "rtl" : "ltr" }}>
-        <div style={{ direction: "ltr", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--freight-100)", borderRadius: "var(--radius-md)", aspectRatio: "1 / 1", overflow: "hidden" }}>
+        <div style={{ direction: "ltr", display: "flex", alignItems: "center", justifyContent: "center", background: "var(-- Track-100)", borderRadius: "var(--radius-md)", aspectRatio: "1 / 1", overflow: "hidden" }}>
           {image ? <img src={image} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "16px", display: "block" }} /> : <div style={{ transform: "scale(2.2)" }}><ServiceIcon code={icon} /></div>}
         </div>
         <div style={{ direction: "ltr" }}>
@@ -45,15 +45,15 @@ export default function About() {
         <div className="container" style={{ maxWidth: 720 }}>
           <h1 style={{ fontSize: "2.1rem" }}>About {name}</h1>
           <p style={{ color: "var(--slate-500)" }}>
-            {name} is a freight and logistics company operating a shipment tracking and customer service
+            {name} is a  Track and logistics company operating a shipment tracking and customer service
             platform. This page will grow to reflect {name}'s full story as that information is provided.
           </p>
         </div>
       </section>
 
-      <AlternatingSection icon="FREIGHT_FORWARDING" title="Who we are" image="/images/about.jpg">
+      <AlternatingSection icon=" Track_FORWARDING" title="Who we are" image="/images/about.jpg">
         <p>
-          {name} is a freight and logistics company. This platform lets customers follow their shipments
+          {name} is a  Track and logistics company. This platform lets customers follow their shipments
           from booking to delivery.
         </p>
         <p>
@@ -69,7 +69,7 @@ export default function About() {
         </ul>
       </AlternatingSection>
 
-      <AlternatingSection icon="ROAD_FREIGHT" title="Our approach" image="/images/approach.jpg">
+      <AlternatingSection icon="ROAD_ Track" title="Our approach" image="/images/approach.jpg">
         <p>
           Every shipment gets a permanent, append-only tracking history - nothing is ever quietly overwritten,
           so both customers and staff can see exactly what happened and when.

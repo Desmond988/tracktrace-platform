@@ -92,11 +92,11 @@ export default function Customers() {
                   {c.user_id ? "Linked" : (
                     <span style={{ display: "flex", gap: 6 }}>
                       <input placeholder="customer's email" value={linkEmail[c.id] || ""} onChange={(e) => setLinkEmail({ ...linkEmail, [c.id]: e.target.value })} style={{ padding: 4, width: 140, border: "1px solid var(--line-200)", borderRadius: "var(--radius-sm)" }} />
-                      <button className="btn-secondary" style={{ border: "none", background: "none", color: "var(--freight-700)", cursor: "pointer" }} onClick={() => linkUser(c)}>Link</button>
+                      <button className="btn-secondary" style={{ border: "none", background: "none", color: "var(-- Track-700)", cursor: "pointer" }} onClick={() => linkUser(c)}>Link</button>
                     </span>
                   )}
                 </td>
-                <td><button className="btn-secondary" style={{ border: "none", background: "none", color: "var(--freight-700)", cursor: "pointer" }} onClick={() => startEdit(c)}>Edit</button></td>
+                <td><button className="btn-secondary" style={{ border: "none", background: "none", color: "var(-- Track-700)", cursor: "pointer" }} onClick={() => startEdit(c)}>Edit</button></td>
               </tr>
             ))}
           </tbody>

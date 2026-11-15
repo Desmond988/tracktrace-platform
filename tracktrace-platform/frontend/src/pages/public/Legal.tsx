@@ -13,7 +13,7 @@ TracksLogistics, based in New York City, New York, United States, is responsible
 If you have any questions about your privacy, contact us at trackslogistic0@gmail.com or call us at +1 (936) 276-8193.
 
 ## What we collect
-We collect only the information we need to provide our freight and logistics services:
+We collect only the information we need to provide our  Track and logistics services:
 
 - Account details: Your name, email address, and phone number.
 - Shipment details: Pickup and delivery addresses, shipment contents, and delivery instructions.
@@ -56,7 +56,7 @@ You agree to provide accurate information and to notify us promptly if you belie
 We may suspend or close an account that violates these terms or is used for fraudulent activity.
 
 ## Services
-Freight and logistics services are provided by TracksLogistics under the agreement made for each shipment, including the quote, booking confirmation, and any shipping documents for that shipment.
+ Track and logistics services are provided by TracksLogistics under the agreement made for each shipment, including the quote, booking confirmation, and any shipping documents for that shipment.
 
 Our services include shipment booking, tracking, customer support, and delivery coordination as described on this website. Specific service details, transit times, and charges will be confirmed for each shipment before booking.
 
@@ -250,22 +250,22 @@ export default function Legal() {
   const isAccessibility = slug === "accessibility";
   // Cookie + Disclaimer intentionally NOT replaced
 
-  if (isPrivacy && (body.includes("[COMPANY EMAIL]") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes("FreightXpress"))) {
+  if (isPrivacy && (body.includes(" trackslogistic0@gmail.com") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes(" TrackXpress"))) {
     body = PROFESSIONAL_PRIVACY_BODY;
   }
-  if (isTerms && (body.includes("[COMPANY") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes("FreightXpress"))) {
+  if (isTerms && (body.includes("[COMPANY") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes(" TrackXpress"))) {
     body = PROFESSIONAL_TERMS_BODY;
   }
-  if (isShipping && (body.includes("will publish") || body.includes("[COMPANY") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes("FreightXpress"))) {
+  if (isShipping && (body.includes("will publish") || body.includes("[COMPANY") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes(" TrackXpress"))) {
     body = PROFESSIONAL_SHIPPING_BODY;
   }
-  if (isCargo && (body.includes("will state") || body.includes("[COMPANY") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes("FreightXpress"))) {
+  if (isCargo && (body.includes("will state") || body.includes("[COMPANY") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes(" TrackXpress"))) {
     body = PROFESSIONAL_CARGO_BODY;
   }
-  if (isDataProtection && (body.includes("[COMPANY") || body.includes("[DATA") || body.includes("will state") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes("FreightXpress"))) {
+  if (isDataProtection && (body.includes("[COMPANY") || body.includes("[DATA") || body.includes("will state") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes(" TrackXpress"))) {
     body = PROFESSIONAL_DATA_PROTECTION_BODY;
   }
-  if (isAccessibility && (body.includes("[COMPANY") || body.includes("will be added") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes("FreightXpress"))) {
+  if (isAccessibility && (body.includes("[COMPANY") || body.includes("will be added") || body.includes("placeholder") || body.includes("not been reviewed") || body.includes(" TrackXpress"))) {
     body = PROFESSIONAL_ACCESSIBILITY_BODY;
   }
 
