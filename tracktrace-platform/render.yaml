@@ -1,0 +1,52 @@
+# OPTIONAL ALTERNATIVE - NOT the documented deployment path.
+# This Blueprint uses Docker and a Render-managed Postgres. The documented staging setup is
+# Neon + a native-Python Render web service + Cloudflare Pages: see docs/DEPLOYMENT.md.
+# Render Blueprint. Import this repo in Render and it provisions all three services.
+# After the first deploy, set the remaining secrets (SMTP/Twilio/S3 if used) in the
+# Render dashboard - they are intentionally left out of this file.
+databases:
+  - name: tnt-postgres
+    plan: starter
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: tnt-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        fromDatabase: { name: tnt-postgres, property: connectionString }
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://REPLACE_WITH_FRONTEND_DOMAIN
+      - key: FRONTEND_URL
+        value: https://REPLACE_WITH_FRONTEND_DOMAIN
+      - key: API_URL
+        value: https://REPLACE_WITH_BACKEND_DOMAIN
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: lax
+      - key: TRUSTED_PROXY_HEADERS
+        value: "true"
+      - key: STORAGE_BACKEND
+        value: s3
+      # SMTP_*, TWILIO_*, S3_* - set manually in the Render dashboard once credentials exist.
+
+  - type: web
+    name: tnt-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: starter
+    dockerBuildArgs:
+      VITE_API_URL: https://REPLACE_WITH_BACKEND_DOMAIN

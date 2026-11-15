@@ -1,0 +1,43 @@
+# Local development only. Production deployment uses Render (see docs/DEPLOYMENT.md) -
+# this compose file is for running the whole stack on a laptop with one command.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tnt
+      POSTGRES_PASSWORD: tnt_dev_pw
+      POSTGRES_DB: tnt_dev
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tnt"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+psycopg://tnt:tnt_dev_pw@db:5432/tnt_dev
+      SECRET_KEY: dev-secret-not-for-production
+      JWT_SECRET: dev-secret-not-for-production
+      CORS_ORIGINS: http://localhost:5173
+      FRONTEND_URL: http://localhost:5173
+    ports: ["8000:8000"]
+    volumes:
+      - ./backend/uploads_dev:/app/uploads_dev
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8000
+    depends_on: [backend]
+    ports: ["5173:80"]
+
+volumes:
+  pgdata:

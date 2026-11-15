@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /staff
+Disallow: /account
+Sitemap: /sitemap.xml

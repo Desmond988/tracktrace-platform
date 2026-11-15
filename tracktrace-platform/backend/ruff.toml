@@ -1,0 +1,13 @@
+line-length = 140
+target-version = "py312"
+
+[lint]
+select = ["E", "F", "I", "B", "C4", "SIM", "RUF"]
+ignore = [
+  "B008",   # Depends(...) in defaults is the required FastAPI pattern
+  "E501",   # line length handled by line-length above; a few long strings are fine
+]
+
+[lint.per-file-ignores]
+"alembic/versions/*.py" = ["E501"]
+"scripts/*.py" = ["E402"]
