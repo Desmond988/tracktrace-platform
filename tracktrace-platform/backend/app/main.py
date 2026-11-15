@@ -19,9 +19,19 @@ app = FastAPI(
 )
 register_error_handlers(app)
 
-app.add_middleware(CORSMiddleware, allow_origins=["https://tracktrace-platform-frontend.onrender.com", "http://localhost:5173", "http://localhost:3000", "http://localhost:5174"], allow_credentials=True,
-                   allow_methods=["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-                   allow_headers=["Content-Type", "Authorization", "X-CSRF-Token", "Accept-Language"], max_age=600)
+_origins = settings.cors_origins_list()
+if settings.FRONTEND_URL and settings.FRONTEND_URL not in _origins:
+    _origins.append(settings.FRONTEND_URL)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=600,
+)
 
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
