@@ -27,11 +27,11 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: CORS_ORIGINS
-        value: https://REPLACE_WITH_FRONTEND_DOMAIN
+        value: https://trackslogistics.netlify.app
       - key: FRONTEND_URL
-        value: https://REPLACE_WITH_FRONTEND_DOMAIN
+        value: https://trackslogistics.netlify.app
       - key: API_URL
-        value: https://REPLACE_WITH_BACKEND_DOMAIN
+        value: https://tracktrace-platform.onrender.com
       - key: COOKIE_SECURE
         value: "true"
       - key: COOKIE_SAMESITE
@@ -49,4 +49,4 @@ services:
     dockerContext: ./frontend
     plan: starter
     dockerBuildArgs:
-      VITE_API_URL: https://REPLACE_WITH_BACKEND_DOMAIN
+      VITE_API_URL: https:// tracktrace-platform.onrender.com
