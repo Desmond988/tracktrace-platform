@@ -5,7 +5,6 @@ from pydantic import BaseModel, Field, field_validator
 
 from app.schemas.common import ORM, AwareDT, OptEmail, OptStr, Phone, StatusOut, Str
 
-
 class AddressIn(BaseModel):
     line1: Str = Field(min_length=1, max_length=255)
     line2: OptStr = Field(default=None, max_length=255)
@@ -19,7 +18,6 @@ class AddressIn(BaseModel):
     def up(cls, v):
         return v.upper()
 
-
 class AddressOut(ORM):
     line1: str
     line2: str | None
@@ -28,14 +26,12 @@ class AddressOut(ORM):
     postal_code: str | None
     country_code: str
 
-
 class ItemIn(BaseModel):
     description: Str = Field(min_length=1, max_length=300)
     quantity: int = Field(default=1, ge=1, le=100000)
     weight_kg: float | None = Field(default=None, ge=0, le=1_000_000)
     dimensions: OptStr = Field(default=None, max_length=80)
     hs_code: OptStr = Field(default=None, max_length=20)
-
 
 class ItemOut(ORM):
     id: uuid.UUID
@@ -44,7 +40,6 @@ class ItemOut(ORM):
     weight_kg: float | None
     dimensions: str | None
     hs_code: str | None
-
 
 class _ShipmentBase(BaseModel):
     reference_number: OptStr = Field(default=None, max_length=80)
@@ -65,7 +60,6 @@ class _ShipmentBase(BaseModel):
     cargo_description: OptStr = Field(default=None, max_length=4000)
     special_instructions: OptStr = Field(default=None, max_length=4000)
 
-
 class ShipmentCreate(_ShipmentBase):
     customer_id: uuid.UUID
     origin: Str = Field(min_length=2, max_length=200)
@@ -74,7 +68,6 @@ class ShipmentCreate(_ShipmentBase):
     status: str = Field(default="SHIPMENT_CREATED", max_length=40)
     estimated_delivery: AwareDT = None
     items: list[ItemIn] = Field(default_factory=list, max_length=200)
-
 
 class ShipmentUpdate(BaseModel):
     """Editable *details*. Status, location and ETA are changed only by adding a tracking event (keeps history intact)."""
@@ -101,7 +94,6 @@ class ShipmentUpdate(BaseModel):
     received_by: OptStr = Field(default=None, max_length=150)
     items: list[ItemIn] | None = Field(default=None, max_length=200)
 
-
 class EventCreate(BaseModel):
     status: str | None = Field(default=None, max_length=40)
     location: OptStr = Field(default=None, max_length=200)
@@ -113,18 +105,16 @@ class EventCreate(BaseModel):
     is_public: bool = True
     received_by: OptStr = Field(default=None, max_length=150)
 
-
 class EventOut(ORM):
     id: uuid.UUID
     status: str
-    status_ref: StatusOut
+    status_ref: StatusOut | None
     location: str | None
     description: str | None
     event_timestamp: datetime
     is_public: bool
     created_at: datetime
     created_by: uuid.UUID | None = None
-
 
 class DocumentOut(ORM):
     id: uuid.UUID
@@ -136,14 +126,12 @@ class DocumentOut(ORM):
     visible_to_customer: bool
     created_at: datetime
 
-
 class CustomerBrief(ORM):
     id: uuid.UUID
     name: str
     company: str | None
     email: str | None
     phone: str | None
-
 
 class ShipmentListItem(ORM):
     id: uuid.UUID
@@ -154,12 +142,11 @@ class ShipmentListItem(ORM):
     destination: str
     current_location: str | None
     status: str
-    status_ref: StatusOut
+    status_ref: StatusOut | None
     estimated_delivery: datetime | None
     actual_delivery: datetime | None
     created_at: datetime
     updated_at: datetime
-
 
 class ShipmentDetail(ShipmentListItem):
     service_type_id: uuid.UUID | None
@@ -183,20 +170,18 @@ class ShipmentDetail(ShipmentListItem):
     items: list[ItemOut]
     events: list[EventOut]
 
-
 class PublicEvent(ORM):
     """Public timeline entry: no internal IDs, no staff identity."""
     status: str
-    status_ref: StatusOut
+    status_ref: StatusOut | None
     location: str | None
     description: str | None
     event_timestamp: datetime
 
-
 class PublicTracking(BaseModel):
     """Deliberately minimal: no customer, sender/recipient names, addresses, phone numbers or documents."""
     tracking_number: str
-    status: StatusOut
+    status: StatusOut | None
     origin: str
     destination: str
     current_location: str | None

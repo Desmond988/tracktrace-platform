@@ -11,7 +11,6 @@ from app.services import tracking_number as tn_service
 
 router = APIRouter(prefix="/api/tracking", tags=["public tracking"])
 
-
 @router.get("/{tracking_number}", response_model=PublicTracking, dependencies=[Depends(limiter("tracking", "RATE_LIMIT_TRACKING"))])
 def track(tracking_number: str, response: Response, db: Session = Depends(get_db)):
     """Public lookup. Returns real database data only; exposes no customer or address details."""
@@ -26,6 +25,6 @@ def track(tracking_number: str, response: Response, db: Session = Depends(get_db
     return PublicTracking(
         tracking_number=s.tracking_number, status=s.status_ref, origin=s.origin, destination=s.destination,
         current_location=s.current_location, created_at=s.created_at, estimated_delivery=s.estimated_delivery, actual_delivery=s.actual_delivery,
-        service_type=s.service_type.name if s.service_type else None,
+        service_type={"name": s.service_type.name} if s.service_type else None,
         pieces=s.pieces, updated_at=s.updated_at, events=[PublicEvent.model_validate(e) for e in events],
     )
