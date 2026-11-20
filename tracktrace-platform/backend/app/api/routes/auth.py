@@ -31,13 +31,13 @@ router = APIRouter(prefix="/api/auth", tags=["auth"])
 def _set_session(response: Response, user: User) -> str:
     token = create_access_token(str(user.id), user.token_version)
     csrf = new_urlsafe_token()
-    # FIX for Netlify (frontend) -> Render (backend) cross-site:
-    # Must be samesite="none" + secure=True, and NO domain (let browser default to Render domain).
-    # If domain is set to frontend domain, browser rejects the cookie.
     common = {"max_age": settings.ACCESS_TOKEN_MINUTES * 60, "secure": True,
               "samesite": "none", "domain": None, "path": "/"}
     response.set_cookie(COOKIE_NAME, token, httponly=True, **common)
-    response.set_cookie(CSRF_COOKIE, csrf, httponly=False, **common)  # readable by JS on purpose (double-submit)
+    response.set_cookie(CSRF_COOKIE, csrf, httponly=False, **common)
+    # NEW: JS on Netlify cannot read a cookie set for Render domain,
+    # so also expose CSRF via header. Frontend saves it to localStorage.
+    response.headers["X-CSRF-Token"] = csrf
     return csrf
 
 def _clear_session(response: Response) -> None:
@@ -59,7 +59,6 @@ def _check_password(pw: str):
 
 @router.post("/register", status_code=201, dependencies=[Depends(limiter("register", "RATE_LIMIT_REGISTER"))])
 def register(body: RegisterIn, request: Request, response: Response, db: Session = Depends(get_db)):
-    """Customer self-registration: name, email, phone, password. No verification code is needed to sign in."""
     _check_password(body.password)
     email = body.email.lower()
     exists = db.scalar(select(User.id).where(func.lower(User.email) == email, User.deleted_at.is_(None)))
@@ -77,17 +76,17 @@ def register(body: RegisterIn, request: Request, response: Response, db: Session
     audit.record(db, "USER_CREATED", user=user, request=request, entity_type="user", entity_id=user.id, meta={"self_registered": True, "role": "CUSTOMER"})
     db.commit()
     db.refresh(user)
-    _set_session(response, user)
-    return me_payload(user)
+    csrf = _set_session(response, user)
+    out = me_payload(user)
+    return {**out.model_dump(), "csrf_token": csrf}
 
 @router.post("/login", dependencies=[Depends(limiter("login", "RATE_LIMIT_LOGIN"))])
 def login(body: LoginIn, request: Request, response: Response, db: Session = Depends(get_db)):
-    """Email + password only. No OTP, no SMS code, no mandatory 2FA."""
     email = body.email.lower()
     user = db.scalar(select(User).where(func.lower(User.email) == email, User.deleted_at.is_(None)))
     now = datetime.now(UTC)
     locked = bool(user and user.locked_until and user.locked_until > now)
-    ok = verify_password(body.password, user.password_hash if user else None)  # always hashes: constant-ish timing
+    ok = verify_password(body.password, user.password_hash if user else None)
     if not user or not ok or locked or not user.is_active:
         if user and not locked:
             user.failed_login_count += 1
@@ -96,15 +95,16 @@ def login(body: LoginIn, request: Request, response: Response, db: Session = Dep
                 user.failed_login_count = 0
         audit.record(db, "LOGIN_FAILED", user=user, request=request, entity_type="user", entity_id=user.id if user else None,
                      user_email=email, meta={"reason": "locked" if locked else "invalid_credentials"})
-        db.commit()  # persist the failure even though the request errors out
+        db.commit()
         raise err(401, "INVALID_CREDENTIALS", "Incorrect email or password, or the account is temporarily locked.")
     user.failed_login_count, user.locked_until, user.last_login_at = 0, None, now
     if needs_rehash(user.password_hash):
         user.password_hash = hash_password(body.password)
     audit.record(db, "LOGIN_SUCCESS", user=user, request=request, entity_type="user", entity_id=user.id)
     db.commit()
-    _set_session(response, user)
-    return me_payload(user)
+    csrf = _set_session(response, user)
+    out = me_payload(user)
+    return {**out.model_dump(), "csrf_token": csrf}
 
 @router.post("/logout", response_model=Msg)
 def logout(response: Response):
@@ -135,14 +135,13 @@ def update_me(body: ProfileUpdateIn, request: Request, user: User = Depends(get_
 
 @router.post("/forgot-password", status_code=202, response_model=Msg, dependencies=[Depends(limiter("forgot", "RATE_LIMIT_FORGOT"))])
 def forgot_password(body: ForgotIn, request: Request, tasks: BackgroundTasks, db: Session = Depends(get_db)):
-    """Always answers the same way so it can't be used to discover which emails have accounts."""
     generic = Msg(message="If an account exists for that email, we have sent a link to reset the password.")
     email = body.email.lower()
     user = db.scalar(select(User).where(func.lower(User.email) == email, User.deleted_at.is_(None), User.is_active.is_(True)))
     if not user:
         return generic
     db.execute(update(PasswordResetToken).where(PasswordResetToken.user_id == user.id, PasswordResetToken.used_at.is_(None))
-               .values(used_at=datetime.now(UTC)))  # older links stop working
+               .values(used_at=datetime.now(UTC)))
     raw = new_urlsafe_token()
     db.add(PasswordResetToken(user_id=user.id, token_hash=hash_token(raw), requested_ip=client_ip(request),
                               expires_at=datetime.now(UTC) + timedelta(minutes=settings.PASSWORD_RESET_MINUTES)))
@@ -162,15 +161,15 @@ def reset_password(body: ResetIn, request: Request, db: Session = Depends(get_db
     user = db.get(User, tok.user_id)
     if not user or user.deleted_at is not None or not user.is_active:
         raise err(400, "INVALID_OR_EXPIRED_TOKEN", "This reset link is invalid or has expired. Please request a new one.")
-    tok.used_at = now  # single use
+    tok.used_at = now
     user.password_hash = hash_password(body.new_password)
-    user.token_version += 1  # signs out every existing session
+    user.token_version += 1
     user.failed_login_count, user.locked_until = 0, None
     audit.record(db, "PASSWORD_RESET_COMPLETED", user=user, request=request, entity_type="user", entity_id=user.id)
     db.commit()
     return Msg(message="Your password has been changed. You can now sign in.")
 
-@router.post("/change-password", response_model=MeOut)
+@router.post("/change-password")
 def change_password(body: ChangePasswordIn, request: Request, response: Response, user: User = Depends(get_current_user),
                     db: Session = Depends(get_db)):
     if not verify_password(body.current_password, user.password_hash):
@@ -180,5 +179,6 @@ def change_password(body: ChangePasswordIn, request: Request, response: Response
     user.token_version += 1
     audit.record(db, "PASSWORD_CHANGED", user=user, request=request, entity_type="user", entity_id=user.id)
     db.commit()
-    _set_session(response, user)  # keep this device signed in with the new token version
-    return me_payload(user)
+    csrf = _set_session(response, user)
+    out = me_payload(user)
+    return {**out.model_dump(), "csrf_token": csrf}

@@ -24,6 +24,8 @@ export class ApiError extends Error {
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 function getCsrfToken(): string | null {
+  const stored = localStorage.getItem("csrf_token");
+  if (stored) return stored;
   const match = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]+)/);
   return match ? decodeURIComponent(match[1]) : null;
 }
@@ -45,6 +47,13 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (res.status === 204) return undefined as T;
   const isJson = res.headers.get("content-type")?.includes("application/json");
   const body = isJson ? await res.json() : null;
+  if (body && typeof (body as any).csrf_token === "string") {
+    localStorage.setItem("csrf_token", (body as any).csrf_token);
+  }
+  const headerCsrf = res.headers.get("X-CSRF-Token");
+  if (headerCsrf) {
+    localStorage.setItem("csrf_token", headerCsrf);
+  }
   if (!res.ok) {
     throw new ApiError(res.status, body?.error || { code: "UNKNOWN_ERROR", message: "Something went wrong." });
   }
@@ -59,3 +68,7 @@ export const api = {
   del: <T,>(path: string) => request<T>(path, { method: "DELETE" }),
   upload: <T,>(path: string, form: FormData) => request<T>(path, { method: "POST", body: form }),
 };
+
+export function clearCsrfToken() {
+  localStorage.removeItem("csrf_token");
+}
