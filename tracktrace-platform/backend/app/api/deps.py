@@ -15,7 +15,6 @@ CSRF_COOKIE = "csrf_token"
 CSRF_HEADER = "x-csrf-token"
 SAFE_METHODS = {"GET", "HEAD", "OPTIONS"}
 
-
 def _extract(request: Request) -> tuple[str | None, bool]:
     """Returns (token, from_cookie). Bearer tokens are not ambient credentials so they are exempt from CSRF checks."""
     auth = request.headers.get("authorization", "")
@@ -23,7 +22,6 @@ def _extract(request: Request) -> tuple[str | None, bool]:
         return auth[7:].strip(), False
     tok = request.cookies.get(COOKIE_NAME)
     return (tok, True) if tok else (None, False)
-
 
 def _load_user(request: Request, db: Session) -> User | None:
     token, from_cookie = _extract(request)
@@ -33,7 +31,8 @@ def _load_user(request: Request, db: Session) -> User | None:
     if not payload:
         raise err(401, "SESSION_EXPIRED", "Your session has expired. Please sign in again.")
     if from_cookie and request.method not in SAFE_METHODS:
-        header, cookie = request.headers.get(CSRF_HEADER, ""), request.cookies.get(CSRF_COOKIE, "")
+        header = (request.headers.get(CSRF_HEADER, "") or "").strip()
+        cookie = (request.cookies.get(CSRF_COOKIE, "") or "").strip()
         if not header or not cookie or not hmac.compare_digest(header, cookie):
             raise err(403, "CSRF_FAILED", "Security check failed. Please refresh the page and try again.")
     try:
@@ -46,20 +45,17 @@ def _load_user(request: Request, db: Session) -> User | None:
         raise err(401, "SESSION_EXPIRED", "Your session has expired. Please sign in again.")
     return user
 
-
 def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
     user = _load_user(request, db)
     if not user:
         raise err(401, "UNAUTHENTICATED", "Please sign in to continue.")
     return user
 
-
 def get_optional_user(request: Request, db: Session = Depends(get_db)) -> User | None:
     try:
         return _load_user(request, db)
     except Exception:
         return None
-
 
 def require_perms(*perms: str):
     def dep(user: User = Depends(get_current_user)) -> User:
@@ -68,7 +64,6 @@ def require_perms(*perms: str):
         return user
 
     return dep
-
 
 def require_customer(user: User = Depends(get_current_user)) -> User:
     if user.role != "CUSTOMER":

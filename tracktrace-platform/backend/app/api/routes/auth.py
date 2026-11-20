@@ -28,21 +28,21 @@ from app.services.notifications import send_password_reset_email
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
-
 def _set_session(response: Response, user: User) -> str:
     token = create_access_token(str(user.id), user.token_version)
     csrf = new_urlsafe_token()
-    common = {"max_age": settings.ACCESS_TOKEN_MINUTES * 60, "secure": settings.COOKIE_SECURE,
-              "samesite": settings.COOKIE_SAMESITE, "domain": settings.COOKIE_DOMAIN, "path": "/"}
+    # FIX for Netlify (frontend) -> Render (backend) cross-site:
+    # Must be samesite="none" + secure=True, and NO domain (let browser default to Render domain).
+    # If domain is set to frontend domain, browser rejects the cookie.
+    common = {"max_age": settings.ACCESS_TOKEN_MINUTES * 60, "secure": True,
+              "samesite": "none", "domain": None, "path": "/"}
     response.set_cookie(COOKIE_NAME, token, httponly=True, **common)
     response.set_cookie(CSRF_COOKIE, csrf, httponly=False, **common)  # readable by JS on purpose (double-submit)
     return csrf
 
-
 def _clear_session(response: Response) -> None:
     for name in (COOKIE_NAME, CSRF_COOKIE):
-        response.delete_cookie(name, path="/", domain=settings.COOKIE_DOMAIN)
-
+        response.delete_cookie(name, path="/", domain=None, secure=True, samesite="none")
 
 def me_payload(user: User) -> MeOut:
     out = MeOut.model_validate(user)
@@ -52,12 +52,10 @@ def me_payload(user: User) -> MeOut:
         out.notify_email, out.notify_sms, out.notify_whatsapp, out.customer_id = c.notify_email, c.notify_sms, c.notify_whatsapp, c.id
     return out
 
-
 def _check_password(pw: str):
     problems = validate_password_strength(pw)
     if problems:
         raise err(422, "WEAK_PASSWORD", "Choose a stronger password (at least 10 characters).", reasons=problems)
-
 
 @router.post("/register", status_code=201, dependencies=[Depends(limiter("register", "RATE_LIMIT_REGISTER"))])
 def register(body: RegisterIn, request: Request, response: Response, db: Session = Depends(get_db)):
@@ -81,7 +79,6 @@ def register(body: RegisterIn, request: Request, response: Response, db: Session
     db.refresh(user)
     _set_session(response, user)
     return me_payload(user)
-
 
 @router.post("/login", dependencies=[Depends(limiter("login", "RATE_LIMIT_LOGIN"))])
 def login(body: LoginIn, request: Request, response: Response, db: Session = Depends(get_db)):
@@ -109,17 +106,14 @@ def login(body: LoginIn, request: Request, response: Response, db: Session = Dep
     _set_session(response, user)
     return me_payload(user)
 
-
 @router.post("/logout", response_model=Msg)
 def logout(response: Response):
     _clear_session(response)
     return Msg(message="Signed out.")
 
-
 @router.get("/me", response_model=MeOut)
 def me(user: User = Depends(get_current_user)):
     return me_payload(user)
-
 
 @router.patch("/me", response_model=MeOut)
 def update_me(body: ProfileUpdateIn, request: Request, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
@@ -138,7 +132,6 @@ def update_me(body: ProfileUpdateIn, request: Request, user: User = Depends(get_
     audit.record(db, "USER_UPDATED", user=user, request=request, entity_type="user", entity_id=user.id, meta={"fields": sorted(data), "self": True})
     db.commit()
     return me_payload(user)
-
 
 @router.post("/forgot-password", status_code=202, response_model=Msg, dependencies=[Depends(limiter("forgot", "RATE_LIMIT_FORGOT"))])
 def forgot_password(body: ForgotIn, request: Request, tasks: BackgroundTasks, db: Session = Depends(get_db)):
@@ -159,7 +152,6 @@ def forgot_password(body: ForgotIn, request: Request, tasks: BackgroundTasks, db
     tasks.add_task(send_password_reset_email, user.email, link, user.preferred_language)
     return generic
 
-
 @router.post("/reset-password", response_model=Msg, dependencies=[Depends(limiter("reset", "RATE_LIMIT_FORGOT"))])
 def reset_password(body: ResetIn, request: Request, db: Session = Depends(get_db)):
     _check_password(body.new_password)
@@ -177,7 +169,6 @@ def reset_password(body: ResetIn, request: Request, db: Session = Depends(get_db
     audit.record(db, "PASSWORD_RESET_COMPLETED", user=user, request=request, entity_type="user", entity_id=user.id)
     db.commit()
     return Msg(message="Your password has been changed. You can now sign in.")
-
 
 @router.post("/change-password", response_model=MeOut)
 def change_password(body: ChangePasswordIn, request: Request, response: Response, user: User = Depends(get_current_user),
