@@ -21,17 +21,14 @@ router = APIRouter(prefix="/api", tags=["shipments"])
 SORTABLE = {"created_at": Shipment.created_at, "updated_at": Shipment.updated_at, "tracking_number": Shipment.tracking_number,
             "status": Shipment.status, "estimated_delivery": Shipment.estimated_delivery, "origin": Shipment.origin, "destination": Shipment.destination}
 
-
 def _like(q: str) -> str:
     return "%" + q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
-
 
 def _active_status(db: Session, code: str) -> ShipmentStatus:
     st = db.get(ShipmentStatus, code)
     if not st or not st.is_active:
         raise err(422, "INVALID_STATUS", "That status is not available.")
     return st
-
 
 def _address(db: Session, data) -> Address | None:
     if not data:
@@ -41,7 +38,6 @@ def _address(db: Session, data) -> Address | None:
     db.flush()
     return a
 
-
 def _get_shipment(db: Session, shipment_id: uuid.UUID, lock: bool = False) -> Shipment:
     stmt = select(Shipment).where(Shipment.id == shipment_id, Shipment.deleted_at.is_(None))
     if lock:
@@ -50,7 +46,6 @@ def _get_shipment(db: Session, shipment_id: uuid.UUID, lock: bool = False) -> Sh
     if not s:
         raise err(404, "SHIPMENT_NOT_FOUND", "Shipment not found.")
     return s
-
 
 @router.get("/shipments", response_model=Page[ShipmentListItem])
 def list_shipments(q: str | None = None, status: str | None = None, customer_id: uuid.UUID | None = None, origin: str | None = None,
@@ -82,7 +77,6 @@ def list_shipments(q: str | None = None, status: str | None = None, customer_id:
     items = db.scalars(stmt).unique().all()
     return Page[ShipmentListItem](items=items, total=total, page=page, page_size=page_size)
 
-
 @router.post("/shipments", response_model=ShipmentDetail, status_code=201)
 def create_shipment(body: ShipmentCreate, request: Request, tasks: BackgroundTasks, user: User = Depends(require_perms("shipments:write")),
                     db: Session = Depends(get_db)):
@@ -111,16 +105,19 @@ def create_shipment(body: ShipmentCreate, request: Request, tasks: BackgroundTas
     db.flush()
     audit.record(db, "SHIPMENT_CREATED", user=user, request=request, entity_type="shipment", entity_id=s.id,  # 3. audit
                  meta={"tracking_number": s.tracking_number, "customer_id": str(customer.id), "status": status.code})
-    pending = notifications.queue_shipment_notifications(db, s, event)
+    try:
+        with db.begin_nested():
+            pending = notifications.queue_shipment_notifications(db, s, event)
+    except Exception as e:
+        print(f"Notification failed but shipment created: {e}")
+        pending = []
     db.commit()
     tasks.add_task(notifications.dispatch, [n.id for n in pending])
     return s
 
-
 @router.get("/shipments/{shipment_id}", response_model=ShipmentDetail)
 def get_shipment(shipment_id: uuid.UUID, user: User = Depends(require_perms("shipments:read")), db: Session = Depends(get_db)):
     return _get_shipment(db, shipment_id)
-
 
 @router.patch("/shipments/{shipment_id}", response_model=ShipmentDetail)
 def update_shipment(shipment_id: uuid.UUID, body: ShipmentUpdate, request: Request, user: User = Depends(require_perms("shipments:write")),
@@ -149,12 +146,10 @@ def update_shipment(shipment_id: uuid.UUID, body: ShipmentUpdate, request: Reque
     db.commit()
     return s
 
-
 @router.get("/shipments/{shipment_id}/events", response_model=list[EventOut])
 def list_events(shipment_id: uuid.UUID, user: User = Depends(require_perms("shipments:read")), db: Session = Depends(get_db)):
     s = _get_shipment(db, shipment_id)
     return sorted(s.events, key=lambda e: (e.event_timestamp, e.created_at))
-
 
 @router.post("/shipments/{shipment_id}/events", response_model=EventOut, status_code=201)
 def add_event(shipment_id: uuid.UUID, body: EventCreate, request: Request, tasks: BackgroundTasks,
@@ -219,18 +214,23 @@ def add_event(shipment_id: uuid.UUID, body: EventCreate, request: Request, tasks
         audit.record(db, "SHIPMENT_UPDATED", user=user, request=request, entity_type="shipment", entity_id=s.id, meta={**base, "fields": ["estimated_delivery"], "from": old["eta"]})
     if status.code == "DELIVERED" and status_changed:
         audit.record(db, "DELIVERY_CONFIRMED", user=user, request=request, entity_type="shipment", entity_id=s.id, meta=base)
-    pending = notifications.queue_shipment_notifications(db, s, event) if (status_changed and is_latest) else []
+    pending = []
+    if status_changed and is_latest:
+        try:
+            with db.begin_nested():
+                pending = notifications.queue_shipment_notifications(db, s, event)
+        except Exception as e:
+            print(f"Notification failed but event saved: {e}")
+            pending = []
     db.commit()
     tasks.add_task(notifications.dispatch, [n.id for n in pending])
     return event
-
 
 # ---------------- documents ----------------
 @router.get("/shipments/{shipment_id}/documents", response_model=list[DocumentOut])
 def list_documents(shipment_id: uuid.UUID, user: User = Depends(require_perms("shipments:read")), db: Session = Depends(get_db)):
     _get_shipment(db, shipment_id)
     return db.scalars(select(Document).where(Document.shipment_id == shipment_id, Document.deleted_at.is_(None)).order_by(Document.created_at.desc())).all()
-
 
 @router.post("/shipments/{shipment_id}/documents", response_model=DocumentOut, status_code=201)
 def upload_document(shipment_id: uuid.UUID, request: Request, file: UploadFile = File(...), doc_type: str = Form("OTHER"),
@@ -252,7 +252,6 @@ def upload_document(shipment_id: uuid.UUID, request: Request, file: UploadFile =
     db.commit()
     return doc
 
-
 @router.delete("/documents/{doc_id}", status_code=204)
 def delete_document(doc_id: uuid.UUID, request: Request, user: User = Depends(require_perms("documents:write")), db: Session = Depends(get_db)):
     doc = db.scalar(select(Document).where(Document.id == doc_id, Document.deleted_at.is_(None)))
@@ -262,7 +261,6 @@ def delete_document(doc_id: uuid.UUID, request: Request, user: User = Depends(re
     audit.record(db, "DOCUMENT_DELETED", user=user, request=request, entity_type="document", entity_id=doc.id, meta={"shipment_id": str(doc.shipment_id)})
     db.commit()
     return Response(status_code=204)
-
 
 @router.get("/documents/{doc_id}/download")
 def download_document(doc_id: uuid.UUID, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
