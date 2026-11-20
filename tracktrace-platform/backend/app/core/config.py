@@ -7,7 +7,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _INSECURE_DEFAULTS = {"", "change-me", "changeme", "dev-secret-not-for-production"}
 
-
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
@@ -23,14 +22,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_MINUTES: int = 480
     PASSWORD_RESET_MINUTES: int = 30
 
-    # URLs / CORS / cookies
-    FRONTEND_URL: str = "http://localhost:5173"
-    API_URL: str = "http://localhost:8000"
-    CORS_ORIGINS: str = "http://localhost:5173"
-    COOKIE_SECURE: bool = False
-    COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"
+    # URLs / CORS / cookies - PRODUCTION DEFAULTS FOR NETLIFY + RENDER
+    FRONTEND_URL: str = "https://trackslogistics.netlify.app"
+    API_URL: str = "https://tracktrace-platform.onrender.com"
+    CORS_ORIGINS: str = "https://trackslogistics.netlify.app"
+    COOKIE_SECURE: bool = True
+    COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "none"
     COOKIE_DOMAIN: str | None = None
-    TRUSTED_PROXY_HEADERS: bool = False  # true only behind a proxy you control (Render/Cloudflare)
+    TRUSTED_PROXY_HEADERS: bool = True  # true only behind a proxy you control (Render/Cloudflare)
 
     # Business defaults (overridable in site settings by SUPER_ADMIN)
     TRACKING_PREFIX: str = "NWT"
@@ -104,10 +103,8 @@ class Settings(BaseSettings):
                 raise ValueError("Unsafe production configuration: " + "; ".join(problems))
         return self
 
-
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-
 
 settings = get_settings()

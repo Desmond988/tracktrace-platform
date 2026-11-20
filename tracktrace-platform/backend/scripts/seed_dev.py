@@ -1,10 +1,10 @@
 """DEVELOPMENT-ONLY seed data. Never run against production.
 
 Creates:
-  - one SUPER_ADMIN account (credentials printed once, not committed anywhere)
-  - a STAFF account
-  - two demo customers with logins
-  - three demo shipments: DEMO-001 (in transit), DEMO-002 (delivered), DEMO-003 (exception)
+    - one SUPER_ADMIN account (credentials printed once, not committed anywhere)
+    - a STAFF account
+    - two demo customers with logins
+    - three demo shipments: DEMO-001 (in transit), DEMO-002 (delivered), DEMO-003 (exception)
 
 Usage:
   ENVIRONMENT=development python scripts/seed_dev.py
@@ -22,15 +22,13 @@ from app.db.session import SessionLocal
 from app.models import Customer, Shipment, ShipmentItem, TrackingEvent, User
 
 if settings.is_production:
-    print("Refusing to seed: ENVIRONMENT=production. This script is for development only.")
-    raise SystemExit(1)
+    print("Skipping seed in production.")
+    raise SystemExit(0)
 
 db = SessionLocal()
 
-
 def rand_pw() -> str:
     return secrets.token_urlsafe(12)
-
 
 def get_or_create_user(email: str, name: str, role: str, phone: str | None = None) -> tuple[User, str | None]:
     u = db.scalar(select(User).where(User.email == email))
@@ -42,7 +40,6 @@ def get_or_create_user(email: str, name: str, role: str, phone: str | None = Non
     db.flush()
     return u, pw
 
-
 def get_or_create_customer(user: User) -> Customer:
     c = db.scalar(select(Customer).where(Customer.user_id == user.id))
     if c:
@@ -51,7 +48,6 @@ def get_or_create_customer(user: User) -> Customer:
     db.add(c)
     db.flush()
     return c
-
 
 printed_credentials = []
 
@@ -77,7 +73,6 @@ db.flush()
 
 now = datetime.now(UTC)
 
-
 def demo_shipment(tracking_number: str, customer: Customer, origin: str, destination: str, events: list[tuple[str, str, str, int]]):
     """events: list of (status, location, description, days_ago)."""
     existing = db.scalar(select(Shipment).where(Shipment.tracking_number == tracking_number))
@@ -99,7 +94,6 @@ def demo_shipment(tracking_number: str, customer: Customer, origin: str, destina
                              event_timestamp=now - timedelta(days=days_ago), created_by=admin.id))
     db.flush()
     return s
-
 
 demo_shipment("DEMO-001", customer1, "Toronto, CA", "Vancouver, CA", [
     ("SHIPMENT_CREATED", "Toronto, CA", "[DEV SEED DATA] Shipment created", 4),
