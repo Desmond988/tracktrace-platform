@@ -198,3 +198,62 @@ th { color: var(--slate-500); font-weight: 600; font-size: 0.82rem; }
 @media (max-width: 480px) {
   .footer-grid { grid-template-columns: 1fr !important; }
 }
+
+/* --- MOBILE FIX - Nov 20 --- */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+img, svg, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+* { min-width: 0; }
+
+@media (max-width: 860px) {
+  .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  h1 { font-size: 2.1rem !important; line-height: 1.1 !important; }
+  h2 { font-size: 1.45rem !important; }
+
+  /* Stack ANY 2-column layout on phone */
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns: 2fr 1fr"],
+  [style*="grid-template-columns: 1fr 2fr"],
+  [style*="grid-template-columns: repeat(2"],
+  [style*="grid-template-columns: repeat(3"],
+  [style*="grid-template-columns: repeat(4"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Flex rows become stacked */
+  [style*="display: flex"] {
+    flex-wrap: wrap !important;
+  }
+
+  /* Buttons full width on phone, no cut-off */
+  .btn {
+    width: 100% !important;
+    padding: 13px 16px !important;
+  }
+
+  /* Hero image should go BELOW text, not beside it */
+  .hero-visual {
+    min-height: 260px !important;
+    width: 100% !important;
+    margin-top: 20px !important;
+  }
+
+  /* Forms + cards full width */
+  .field input, .field select, .field textarea {
+    width: 100% !important;
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-header-inner { gap: 8px !important; }
+  .site-nav { gap: 8px !important; }
+}
